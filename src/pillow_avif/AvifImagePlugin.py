@@ -19,6 +19,12 @@ CHROMA_UPSAMPLING = "auto"
 # Decoding is only affected by this for libavif **0.8.4** or greater.
 DEFAULT_MAX_THREADS = 0
 
+SUBSAMPLING_INT_TO_STR = {
+    0: "4:4:4",
+    1: "4:2:2",
+    2: "4:2:0",
+}
+
 if sys.version_info[0] == 2:
     text_type = unicode  # noqa
 else:
@@ -170,6 +176,8 @@ def _save(im, fp, filename, save_all=False):
 
     duration = info.get("duration", 0)
     subsampling = info.get("subsampling", "4:2:0")
+    if isinstance(subsampling, int):
+        subsampling = SUBSAMPLING_INT_TO_STR.get(subsampling)
     speed = info.get("speed", 6)
     max_threads = info.get("max_threads", DEFAULT_MAX_THREADS)
     codec = info.get("codec", "auto")
